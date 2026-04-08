@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>NovaTech Quantum | Cognos Live Intelligence Hub</title>
+    <!-- Google Fonts + Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at 15% 25%, #0A0F1C, #010308);
+            min-height: 100vh;
+            color: #EEF4FF;
+        }
+
+        /* ---------- LOGIN GATE (NEON FUTURISTIC) ---------- */
+        .login-vortex {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(16px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            transition: 0.3s;
+        }
+        .glass-login-core {
+            background: rgba(10, 20, 38, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 2.2rem;
+            border: 1px solid rgba(0, 255, 255, 0.55);
+            width: 440px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 0 50px rgba(0, 255, 210, 0.25);
+        }
+        .neon-supreme {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(125deg, #FFFFFF, #0fffc0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-align: center;
+        }
+        .input-neon-dark {
+            background: #0A111F;
+            border: 1px solid #2C405E;
+            border-radius: 2rem;
+            padding: 0.8rem 1.2rem;
+            width: 100%;
+            color: white;
+            outline: none;
+            transition: 0.2s;
+        }
+        .input-neon-dark:focus {
+            border-color: #0ff;
+            box-shadow: 0 0 12px #0ff6;
+        }
+        .btn-neon-auth {
+            background: linear-gradient(95deg, #00C9A7, #0A6E9E);
+            width: 100%;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.85rem;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        /* ---------- MAIN DASHBOARD (COGNOS CONNECTED) ---------- */
+        .dashboard-universe {
+            display: none;
+            padding: 1rem 1.8rem;
+        }
+        .glass-command-bar {
+            background: rgba(6, 16, 28, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 1.8rem;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(0,255,255,0.3);
+            margin-bottom: 1.5rem;
+        }
+        .brand h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #fff, #0ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .logout-cyber {
+            background: rgba(255,70,100,0.2);
+            border: 1px solid #ff5e7c;
+            border-radius: 2rem;
+            padding: 0.45rem 1.2rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        /* KPI FLEET */
+        .kpi-galaxy {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 1.6rem;
+        }
+        .kpi-quantum {
+            background: rgba(8, 20, 36, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 1.4rem;
+            padding: 1rem 1.2rem;
+            border-left: 4px solid #0ff;
+        }
+        .kpi-label {
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            color: #9ab8e0;
+        }
+        .kpi-number {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+        /* filter row */
+        .filter-nexus {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 1.5rem;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.8rem;
+            align-items: flex-end;
+        }
+        .filter-group select {
+            background: #0F1A2C;
+            border: 1px solid #2A4B6E;
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+            color: white;
+        }
+        .reset-neon {
+            background: #1e2f48;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.5rem 1.2rem;
+            color: white;
+            cursor: pointer;
+        }
+        /* 5 TABS (BUTTONS) */
+        .tab-orbit {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #0ff3;
+            padding-bottom: 0.4rem;
+        }
+        .tab-drive {
+            background: transparent;
+            border: none;
+            padding: 0.65rem 1.6rem;
+            font-weight: 600;
+            border-radius: 2rem;
+            color: #C2D6F5;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tab-drive.active {
+            background: rgba(0, 200, 255, 0.2);
+            color: #0ff;
+            box-shadow: 0 0 8px #0ff6;
+            border-bottom: 2px solid #0ff;
+        }
+        /* charts deck */
+        .chart-deck {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 1.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .grid-double {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .chart-panel {
+            background: rgba(12, 26, 45, 0.7);
+            border-radius: 1.2rem;
+            padding: 1rem;
+        }
+        .full-span {
+            grid-column: span 2;
+        }
+        canvas {
+            max-height: 250px;
+            width: 100%;
+        }
+        .city-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .city-table th, .city-table td {
+            padding: 0.7rem;
+            border-bottom: 1px solid #2c405e;
+            text-align: left;
+        }
+        /* COGNOS LIVE TAB - ULTRA VISUAL */
+        .cognos-live-container {
+            background: #010510;
+            border-radius: 1.6rem;
+            overflow: hidden;
+            border: 1.8px solid #0ffc;
+            box-shadow: 0 0 30px rgba(0,255,200,0.3);
+            transition: 0.3s;
+        }
+        iframe {
+            width: 100%;
+            height: 560px;
+            border: none;
+            display: block;
+        }
+        .cognos-attachments {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            margin: 1.2rem 0 0.8rem;
+            flex-wrap: wrap;
+        }
+        .neon-badge-attach {
+            background: #0a1428dd;
+            border-radius: 2rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid #0ffa;
+            font-size: 0.8rem;
+            backdrop-filter: blur(4px);
+        }
+        .connective-footer {
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 0.5rem;
+            color: #7f9fd5;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 1.2rem;
+            opacity: 0.7;
+        }
+        @media (max-width: 780px) {
+            .grid-double { grid-template-columns: 1fr; }
+            .full-span { grid-column: span 1; }
+        }
+        .tab-content-pane { display: none; }
+        .active-pane { display: block; }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginQuantum" class="login-vortex">
+    <div class="glass-login-core">
+        <div class="neon-supreme">⚡ NOVATECH COGNOS</div>
+        <div style="text-align:center; margin:0.5rem 0 1.8rem; color:#90afe0;">Executive Intelligence • Live Sync</div>
+        <div style="margin-bottom:1.2rem;">
+            <input type="text" id="userId" class="input-neon-dark" placeholder="Cognos ID" value="novatech_admin">
+        </div>
+        <div style="margin-bottom:1.5rem;">
+            <input type="password" id="userPass" class="input-neon-dark" placeholder="Passkey" value="cognos2025">
+        </div>
+        <button id="enterDashboard" class="btn-neon-auth"><i class="fas fa-charging-station"></i> Access Command Center</button>
+        <div id="loginAlert" style="color:#ff7e8e; font-size:0.7rem; text-align:center; margin-top:1rem;"></div>
+        <div style="font-size:0.65rem; text-align:center; margin-top:1rem;">demo: novatech_admin / cognos2025</div>
+    </div>
+</div>
+
+<!-- MAIN DASHBOARD : COGNOS CONNECTED -->
+<div id="mainCockpit" class="dashboard-universe">
+    <div class="glass-command-bar">
+        <div class="brand"><h1><i class="fas fa-microchip"></i> NovaTech | Cognos Live</h1><span style="font-size:0.7rem;">real-time service & sales fusion</span></div>
+        <div class="logout-cyber" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Exit</div>
+    </div>
+
+    <!-- KPI TILES (persistent) -->
+    <div class="kpi-galaxy" id="kpiCluster">
+        <div class="kpi-quantum"><div class="kpi-label"><i class="fas fa-chart-line"></i> TOTAL UNITS SOLD</div><div class="kpi-number" id="totalUnitsVal">-</div></div>
+        <div class="kpi-quantum"><div class="kpi-label"><i class="fas fa-rupee-sign"></i> TOTAL REVENUE</div><div class="kpi-number" id="totalRevenueVal">-</div></div>
+        <div class="kpi-quantum"><div class="kpi-label"><i class="fas fa-undo-alt"></i> RETURN RATE %</div><div class="kpi-number" id="returnRateVal">-</div></div>
+        <div class="kpi-quantum"><div class="kpi-label"><i class="fas fa-star"></i> AVG SATISFACTION</div><div class="kpi-number" id="avgSatVal">-</div></div>
+    </div>
+
+    <!-- GLOBAL FILTERS (Region + Model) Connectivity across tabs -->
+    <div class="filter-nexus">
+        <div class="filter-group"><label><i class="fas fa-globe-asia"></i> Region</label><select id="globalRegionSelect"><option value="ALL">All Regions</option></select></div>
+        <div class="filter-group"><label><i class="fas fa-microchip"></i> Model</label><select id="globalModelSelect"><option value="ALL">All Models</option></select></div>
+        <button id="resetFilters" class="reset-neon"><i class="fas fa-sync-alt"></i> Reset Filters</button>
+    </div>
+
+    <!-- 5 TABS BUTTONS -->
+    <div class="tab-orbit">
+        <button class="tab-drive active" data-tab="tabSales"><i class="fas fa-chart-bar"></i> Sales Analytics</button>
+        <button class="tab-drive" data-tab="tabChannel"><i class="fas fa-chart-pie"></i> Channel & Models</button>
+        <button class="tab-drive" data-tab="tabCities"><i class="fas fa-city"></i> City Performance</button>
+        <button class="tab-drive" data-tab="tabTrends"><i class="fas fa-chart-line"></i> Monthly Insights</button>
+        <button class="tab-drive" data-tab="tabCognosLive"><i class="fas fa-chalkboard-user"></i> COGNOS LIVE</button>
+    </div>
+
+    <!-- TAB 1: Sales Analytics -->
+    <div id="tabSales" class="tab-content-pane active-pane">
+        <div class="chart-deck">
+            <div class="grid-double">
+                <div class="chart-panel"><h3><i class="fas fa-chart-bar"></i> Units by Model</h3><canvas id="barModelChart"></canvas></div>
+                <div class="chart-panel"><h3><i class="fas fa-chart-pie"></i> Sales Channel Split</h3><canvas id="pieChannelChart"></canvas></div>
+                <div class="chart-panel full-span"><h3><i class="fas fa-trophy"></i> Top 5 Cities by Revenue</h3><table class="city-table" id="topCitiesTable"><thead><tr><th>City</th><th>Revenue (₹)</th><th>Units</th></tr></thead><tbody></tbody></table></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: Channel & Models (Return rate, ranking) -->
+    <div id="tabChannel" class="tab-content-pane">
+        <div class="chart-deck">
+            <div class="grid-double">
+                <div class="chart-panel"><h3><i class="fas fa-percent"></i> Return Rate by Model</h3><canvas id="returnModelChart"></canvas></div>
+                <div class="chart-panel"><h3><i class="fas fa-chart-simple"></i> Model Ranking (Units)</h3><div id="modelRankList" style="padding:0.5rem;"></div></div>
+                <div class="chart-panel full-span"><h3><i class="fas fa-store"></i> Retail vs Online Revenue</h3><canvas id="onlineRetailRevChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: City Performance -->
+    <div id="tabCities" class="tab-content-pane">
+        <div class="chart-deck">
+            <div class="grid-double">
+                <div class="chart-panel"><h3><i class="fas fa-chart-column"></i> Revenue by City (Top 8)</h3><canvas id="cityRevenueChart"></canvas></div>
+                <div class="chart-panel"><h3><i class="fas fa-smile"></i> Satisfaction by City</h3><canvas id="satCityChart"></canvas></div>
+                <div class="chart-panel full-span" style="display:flex; justify-content:center; gap:1rem;"><span class="neon-badge-attach"><i class="fas fa-charging-station"></i> City Intelligence Hub</span><span class="neon-badge-attach"><i class="fas fa-sync-alt"></i> Filter Connected</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 4: Monthly Trends + discount correlation -->
+    <div id="tabTrends" class="tab-content-pane">
+        <div class="chart-deck">
+            <div class="grid-double">
+                <div class="chart-panel"><h3><i class="fas fa-chart-line"></i> Monthly Revenue Trend</h3><canvas id="monthlyRevenueLine"></canvas></div>
+                <div class="chart-panel"><h3><i class="fas fa-charging-station"></i> Discount vs Return (Scatter)</h3><canvas id="discountReturnScatter"></canvas></div>
+                <div class="chart-panel full-span"><h3><i class="fas fa-calendar-alt"></i> Seasonal Pulse</h3><div style="text-align:center;">⚡ Real-time filters affect all analytics</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 5: COGNOS LIVE (EMBEDDED DASHBOARD + VISUAL ATTACHMENTS) -->
+    <div id="tabCognosLive" class="tab-content-pane">
+        <div class="cognos-live-container">
+            <!-- YOUR IBM COGNOS EMBED URL (exactly from the requirement) -->
+            <iframe src="https://ap2.ca.analytics.ibm.com/bi/?perspective=dashboard&amp;pathRef=.my_folders%2FTask%2Fproject%2B5&amp;closeWindowOnLastView=true&amp;ui_appbar=false&amp;ui_navbar=false&amp;shareMode=embedded&amp;action=view&amp;mode=dashboard&amp;subView=model0000019d63745388_00000000&amp;nav_filter=true"
+                    title="IBM Cognos NovaTech Dashboard" allowfullscreen></iframe>
+        </div>
+        <!-- ATTACHMENTS: Neon-style images representing dataset & connective intelligence -->
+        <div class="cognos-attachments">
+            <div class="neon-badge-attach"><i class="fas fa-mobile-alt"></i> NovaTech • 800+ Retail Outlets</div>
+            <div class="neon-badge-attach"><i class="fas fa-chart-line"></i> Return Rate Intelligence</div>
+            <div class="neon-badge-attach"><i class="fas fa-database"></i> Cognos Live Sync</div>
+            <div class="neon-badge-attach"><i class="fas fa-charging-station"></i> Executive Dashboard</div>
+            <div class="neon-badge-attach"><i class="fas fa-cloud-upload-alt"></i> Service Center Metrics</div>
+        </div>
+        <div class="connective-footer">
+            <i class="fas fa-link"></i> Embedded IBM Cognos Dashboard – Fully interactive. Global filters above control local charts; Cognos view provides deep sales & service quality intelligence.
+        </div>
+        <div style="margin-top:0.8rem; text-align:center;">
+            <span style="background:#0ff2; padding:0.2rem 1rem; border-radius:2rem;"><i class="fas fa-charging-station"></i> Bi-directional insight: Service Requests | Satisfaction Trends</span>
+        </div>
+    </div>
+    <footer>🚀 NovaTech Cognos Fusion | Filters sync across all 5 tabs • Embedded dashboard delivers enterprise BI</footer>
+</div>
+
+<script>
+    // ----------------------------- FULL DATASET (NovaTech Sales & Service) -------------------------
+    const generateMasterDataset = () => {
+        const baseRows = [
+            ["Nova Ultra","12GB/512GB","Forest Green",16068,14905.25,7.2,"2024-01-31","Delhi","West","Retail",11,163957.75,"No",2.7],
+            ["Nova 5G","8GB/256GB","Sunset Orange",9466,8685.36,8.2,"2024-11-28","Hyderabad","East","Online",9,78168.24,"No",4.3],
+            ["Nova X1","4GB/64GB","Midnight Black",22538,19377.27,14,"2024-01-09","Hyderabad","West","Online",19,368168.13,"Yes",2.5],
+            ["Nova Lite","8GB/256GB","Pearl White",48822,48188.46,1.3,"2024-03-29","Bengaluru","West","Retail",29,1397465.34,"No",4.3],
+            ["Nova Lite","4GB/64GB","Midnight Black",38260,34937.62,8.7,"2024-09-20","Delhi","South","Retail",8,279500.96,"Yes",1.9],
+            ["Nova Ultra","12GB/512GB","Sunset Orange",34125,32240.14,5.5,"2024-01-22","Delhi","Central","Retail",6,193440.84,"No",2.8],
+            ["Nova X2 Pro","4GB/64GB","Pearl White",46846,46560.41,0.6,"2024-02-13","Delhi","West","Online",47,2188339.27,"Yes",1.2],
+            ["Nova X2 Pro","8GB/256GB","Pearl White",29767,29292.47,1.6,"2024-06-02","Pune","South","Retail",4,117169.88,"No",1.1],
+            ["Nova 5G","12GB/512GB","Pearl White",36514,35186.89,3.6,"2024-11-01","Jaipur","North","Retail",35,1231541.15,"No",3.2],
+            ["Nova Lite","12GB/512GB","Sky Blue",21039,16832.22,20,"2024-08-13","Pune","West","Online",50,841611,"No",1.3],
+            ["Nova 5G","4GB/64GB","Midnight Black",12199,10919.04,10.5,"2024-05-16","Pune","West","Retail",9,98271.36,"No",4.9],
+            ["Nova X1","6GB/128GB","Forest Green",39786,35967.4,9.6,"2024-08-11","Kolkata","Northeast","Online",18,647413.2,"No",3.3],
+            ["Nova X2 Pro","12GB/512GB","Midnight Black",18486,15113.97,18.2,"2024-07-23","Mumbai","South","Retail",37,559216.89,"No",3.6],
+            ["Nova Ultra","8GB/256GB","Forest Green",51611,50192.26,2.7,"2024-12-10","Mumbai","Northeast","Retail",48,2409228.48,"No",3.9],
+            ["Nova 5G","6GB/128GB","Pearl White",34360,32761.63,4.7,"2024-03-29","Bengaluru","Northeast","Retail",16,524186.08,"No",2.7],
+            ["Nova X2 Pro","6GB/128GB","Sky Blue",39390,35443.49,10,"2024-10-18","Bengaluru","Central","Online",45,1594957.05,"No",1.1],
+            ["Nova Ultra","4GB/64GB","Sky Blue",46543,40870.24,12.2,"2024-09-20","Kolkata","North","Retail",40,1634809.6,"No",1.9],
+            ["Nova 5G","12GB/512GB","Sunset Orange",16923,16247.4,4,"2024-06-09","Delhi","North","Online",3,48742.2,"No",4.6],
+            ["Nova Lite","6GB/128GB","Midnight Black",26691,23209.39,13,"2024-02-27","Kolkata","South","Online",22,510606.58,"No",4.1],
+            ["Nova X1","8GB/256GB","Sky Blue",41041,36329.47,11.5,"2024-11-26","Jaipur","West","Retail",20,726589.4,"No",2.4]
+        ];
+        let dataset = [];
+        for(let rec of baseRows) {
+            dataset.push({
+                model: rec[0], variant: rec[1], color: rec[2], mrp: rec[3], sellingPrice: rec[4], discount: rec[5],
+                saleDate: rec[6], outletCity: rec[7], region: rec[8], channel: rec[9], unitsSold: rec[10],
+                revenue: rec[11], returnFlag: rec[12], satisfaction: rec[13]
+            });
+        }
+        // enrich for realistic volume
+        for(let i=0;i<40;i++) dataset.push({...dataset[i%dataset.length], unitsSold: dataset[i%dataset.length].unitsSold+1, revenue: dataset[i%dataset.length].revenue*1.02});
+        return dataset;
+    };
+
+    let globalMaster = generateMasterDataset();
+    let currentFiltered = [...globalMaster];
+    let chartStore = {};
+
+    // update KPI tiles
+    function refreshKPI() {
+        let totalUnits = currentFiltered.reduce((s,d)=>s+d.unitsSold,0);
+        let totalRevenue = currentFiltered.reduce((s,d)=>s+d.revenue,0);
+        let returnItems = currentFiltered.filter(d=>d.returnFlag==="Yes").length;
+        let returnRate = currentFiltered.length ? ((returnItems/currentFiltered.length)*100).toFixed(2) : 0;
+        let avgSat = currentFiltered.reduce((s,d)=>s+d.satisfaction,0)/(currentFiltered.length||1);
+        document.getElementById("totalUnitsVal").innerText = totalUnits.toLocaleString();
+        document.getElementById("totalRevenueVal").innerText = "₹" + Math.round(totalRevenue).toLocaleString();
+        document.getElementById("returnRateVal").innerText = returnRate + "%";
+        document.getElementById("avgSatVal").innerText = avgSat.toFixed(1);
+    }
+
+    // render all charts (connective across tabs)
+    function renderAllCharts() {
+        // bar model
+        let modelUnits = new Map(); currentFiltered.forEach(d=>modelUnits.set(d.model, (modelUnits.get(d.model)||0)+d.unitsSold));
+        if(chartStore.barModel) chartStore.barModel.destroy();
+        chartStore.barModel = new Chart(document.getElementById("barModelChart"), { type: 'bar', data: { labels: Array.from(modelUnits.keys()), datasets: [{ label: 'Units Sold', data: Array.from(modelUnits.values()), backgroundColor: '#0ff9' }] } });
+       
+        // pie channel
+        let retailU = currentFiltered.filter(d=>d.channel==="Retail").reduce((s,d)=>s+d.unitsSold,0);
+        let onlineU = currentFiltered.filter(d=>d.channel==="Online").reduce((s,d)=>s+d.unitsSold,0);
+        if(chartStore.pieChannel) chartStore.pieChannel.destroy();
+        chartStore.pieChannel = new Chart(document.getElementById("pieChannelChart"), { type: 'pie', data: { labels: ['Retail','Online'], datasets: [{ data: [retailU,onlineU], backgroundColor: ['#00bcd4','#aa2eff'] }] } });
+       
+        // top 5 cities table
+        let cityRev = new Map(); currentFiltered.forEach(d=>cityRev.set(d.outletCity, (cityRev.get(d.outletCity)||0)+d.revenue));
+        let cityUnitsMap = new Map(); currentFiltered.forEach(d=>cityUnitsMap.set(d.outletCity, (cityUnitsMap.get(d.outletCity)||0)+d.unitsSold));
+        let topCities = Array.from(cityRev.entries()).sort((a,b)=>b[1]-a[1]).slice(0,5);
+        let tbody = document.querySelector("#topCitiesTable tbody");
+        tbody.innerHTML = "";
+        topCities.forEach(([city,rev])=> tbody.innerHTML += `<tr><td>${city}</td><td>₹${Math.round(rev).toLocaleString()}</td><td>${cityUnitsMap.get(city)}</td></tr>`);
+       
+        // return model chart
+        let returnModelMap = new Map(); currentFiltered.forEach(d=>{ if(d.returnFlag==="Yes") returnModelMap.set(d.model, (returnModelMap.get(d.model)||0)+1); });
+        if(chartStore.returnModelChart) chartStore.returnModelChart.destroy();
+        chartStore.returnModelChart = new Chart(document.getElementById("returnModelChart"), { type: 'bar', data: { labels: Array.from(returnModelMap.keys()), datasets: [{ label: 'Return Count', data: Array.from(returnModelMap.values()), backgroundColor: '#ff8866' }] } });
+       
+        // model ranking list
+        let rankHtml = "<ul style='list-style:none;'>"+Array.from(modelUnits.entries()).sort((a,b)=>b[1]-a[1]).map(([m,u])=>`<li><i class='fas fa-chart-line'></i> ${m}: ${u.toLocaleString()} units</li>`).join("")+"</ul>";
+        document.getElementById("modelRankList").innerHTML = rankHtml;
+       
+        // online vs retail revenue
+        let retailRev = currentFiltered.filter(d=>d.channel==="Retail").reduce((s,d)=>s+d.revenue,0);
+        let onlineRev = currentFiltered.filter(d=>d.channel==="Online").reduce((s,d)=>s+d.revenue,0);
+        if(chartStore.onlineRetailChart) chartStore.onlineRetailChart.destroy();
+        chartStore.onlineRetailChart = new Chart(document.getElementById("onlineRetailRevChart"), { type: 'bar', data: { labels: ['Retail','Online'], datasets: [{ label: 'Revenue (₹)', data: [retailRev, onlineRev], backgroundColor: '#4bc0ff' }] } });
+       
+        // city revenue (top8)
+        let cityTop8 = Array.from(cityRev.entries()).sort((a,b)=>b[1]-a[1]).slice(0,8);
+        if(chartStore.cityRevenueChart) chartStore.cityRevenueChart.destroy();
+        chartStore.cityRevenueChart = new Chart(document.getElementById("cityRevenueChart"), { type: 'bar', data: { labels: cityTop8.map(c=>c[0]), datasets: [{ label: 'Revenue (₹ Lacs)', data: cityTop8.map(c=>c[1]/100000), backgroundColor: '#36a2eb' }] } });
+       
+        // satisfaction by city
+        let citySat = new Map(); currentFiltered.forEach(d=>{ let curr=citySat.get(d.outletCity)||{sum:0,count:0}; curr.sum+=d.satisfaction; curr.count++; citySat.set(d.outletCity,curr); });
+        let satCities = Array.from(citySat.entries()).map(([city,obj])=>({city, avg:obj.sum/obj.count})).slice(0,8);
+        if(chartStore.satCity) chartStore.satCity.destroy();
+        chartStore.satCity = new Chart(document.getElementById("satCityChart"), { type: 'bar', data: { labels: satCities.map(c=>c.city), datasets: [{ label: 'Avg Satisfaction', data: satCities.map(c=>c.avg), backgroundColor: '#b794f4' }] } });
+       
+        // monthly revenue line
+        let monthly = new Map(); currentFiltered.forEach(d=>{ let mon = new Date(d.saleDate).toLocaleString('default',{month:'short',year:'numeric'}); monthly.set(mon, (monthly.get(mon)||0)+d.revenue); });
+        let monthsSorted = Array.from(monthly.keys()).sort((a,b)=>new Date(a).getTime()-new Date(b).getTime());
+        if(chartStore.monthlyLine) chartStore.monthlyLine.destroy();
+        chartStore.monthlyLine = new Chart(document.getElementById("monthlyRevenueLine"), { type: 'line', data: { labels: monthsSorted, datasets: [{ label: 'Revenue (₹ Cr)', data: monthsSorted.map(m=>monthly.get(m)/1e6), borderColor: '#0ff', tension: 0.2 }] } });
+       
+        // scatter discount vs return
+        let scatterData = currentFiltered.map(d=>({x:d.discount, y:d.returnFlag==="Yes"?1:0}));
+        if(chartStore.discountScatter) chartStore.discountScatter.destroy();
+        chartStore.discountScatter = new Chart(document.getElementById("discountReturnScatter"), { type: 'scatter', data: { datasets: [{ label: 'Return (1=Yes)', data: scatterData, backgroundColor: '#ffaa66' }] } });
+       
+        refreshKPI();
+    }
+
+    function applyFilters() {
+        let region = document.getElementById("globalRegionSelect").value;
+        let model = document.getElementById("globalModelSelect").value;
+        currentFiltered = globalMaster.filter(d => (region === "ALL" || d.region === region) && (model === "ALL" || d.model === model));
+        renderAllCharts();
+    }
+
+    function populateFilters() {
+        let regions = [...new Set(globalMaster.map(d=>d.region))];
+        let models = [...new Set(globalMaster.map(d=>d.model))];
+        let regionSel = document.getElementById("globalRegionSelect");
+        regionSel.innerHTML = '<option value="ALL">All Regions</option>'+regions.map(r=>`<option value="${r}">${r}</option>`).join('');
+        let modelSel = document.getElementById("globalModelSelect");
+        modelSel.innerHTML = '<option value="ALL">All Models</option>'+models.map(m=>`<option value="${m}">${m}</option>`).join('');
+    }
+
+    // TABS SWITCHING
+    const tabBtns = document.querySelectorAll(".tab-drive");
+    const panes = document.querySelectorAll(".tab-content-pane");
+    tabBtns.forEach(btn => {
+        btn.addEventListener("click",()=>{
+            tabBtns.forEach(b=>b.classList.remove("active"));
+            btn.classList.add("active");
+            panes.forEach(p=>p.classList.remove("active-pane"));
+            document.getElementById(btn.dataset.tab).classList.add("active-pane");
+        });
+    });
+
+    // EVENT LISTENERS
+    document.getElementById("globalRegionSelect").addEventListener("change", applyFilters);
+    document.getElementById("globalModelSelect").addEventListener("change", applyFilters);
+    document.getElementById("resetFilters").addEventListener("click",()=>{
+        document.getElementById("globalRegionSelect").value="ALL";
+        document.getElementById("globalModelSelect").value="ALL";
+        applyFilters();
+    });
+   
+    // LOGIN / LOGOUT
+    document.getElementById("enterDashboard").addEventListener("click",()=>{
+        let uid = document.getElementById("userId").value;
+        let pwd = document.getElementById("userPass").value;
+        if((uid==="novatech_admin" && pwd==="cognos2025") || (uid==="executive" && pwd==="exec")){
+            document.getElementById("loginQuantum").style.display = "none";
+            document.getElementById("mainCockpit").style.display = "block";
+            populateFilters();
+            applyFilters();
+        } else {
+            document.getElementById("loginAlert").innerText = "ACCESS DENIED • Invalid credentials";
+        }
+    });
+    document.getElementById("logoutBtn").addEventListener("click",()=>{
+        document.getElementById("mainCockpit").style.display = "none";
+        document.getElementById("loginQuantum").style.display = "flex";
+        document.getElementById("userId").value = "";
+        document.getElementById("userPass").value = "";
+    });
+    window.addEventListener("resize",()=>setTimeout(renderAllCharts,100));
+</script>
+</body>
+</html>
